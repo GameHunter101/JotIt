@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+bytemuck = "1.16.0"
 gamezap = {git = "https://github.com/GameHunter101/gamezap-lib" }
 sdl2 = { version = "0.36", featuers = ["raw-window-handle"] }
 tokio = {version = "1.35.1", features = ["full"]}

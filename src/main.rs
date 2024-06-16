@@ -1,10 +1,13 @@
+use hermite_modify_component::HermiteModifyComponent;
 use gamezap::{
     ecs::{
-        component::Component, components::mesh_component::MeshComponent, material::Material,
+        components::mesh_component::MeshComponent, material::Material,
         scene::Scene,
     },
     model::Vertex,
 };
+
+pub mod hermite_modify_component;
 
 #[tokio::main]
 async fn main() {
@@ -68,20 +71,38 @@ async fn main() {
         "shaders/path_vert.wgsl",
         "shaders/path_frag.wgsl",
         Vec::new(),
+        Some(bytemuck::cast_slice(&[HermitePoints {
+            point_1: [0.0, 0.0],
+            point_2: [0.1, 0.1],
+            point_3: [0.2, 0.2],
+            point_4: [0.3, 0.3],
+        }])),
         true,
         render_device,
     );
 
-    let test_square_components = vec![Box::new(test_square_mesh_component) as Component];
+    let test_square_hermite_modify_component = HermiteModifyComponent::default();
 
     let _test_square = scene.create_entity(
         0,
         true,
-        test_square_components,
+        vec![
+            Box::new(test_square_mesh_component),
+            Box::new(test_square_hermite_modify_component),
+        ],
         Some((vec![test_square_material], 0)),
     );
 
     gamezap_engine.create_scene(scene);
 
     gamezap_engine.main_loop();
+}
+
+#[repr(C)]
+#[derive(Debug, bytemuck::Pod, bytemuck::Zeroable, Clone, Copy)]
+struct HermitePoints {
+    point_1: [f32; 2],
+    point_2: [f32; 2],
+    point_3: [f32; 2],
+    point_4: [f32; 2],
 }
