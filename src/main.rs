@@ -1,12 +1,12 @@
-use hermite_modify_component::HermiteModifyComponent;
+use canvas_component::CanvasComponent;
 use gamezap::{
-    ecs::{
-        components::mesh_component::MeshComponent, material::Material,
-        scene::Scene,
-    },
+    ecs::{components::mesh_component::MeshComponent, material::Material, scene::Scene},
     model::Vertex,
 };
 
+use hermite_modify_component::HermiteModifyComponent;
+
+pub mod canvas_component;
 pub mod hermite_modify_component;
 
 #[tokio::main]
@@ -78,12 +78,12 @@ async fn main() {
             point_4: [0.3, 0.3],
         }])),
         true,
-        render_device,
+        render_device.clone(),
     );
 
     let test_square_hermite_modify_component = HermiteModifyComponent::default();
 
-    let _test_square = scene.create_entity(
+    /* let _test_square = scene.create_entity(
         0,
         true,
         vec![
@@ -91,6 +91,27 @@ async fn main() {
             Box::new(test_square_hermite_modify_component),
         ],
         Some((vec![test_square_material], 0)),
+    ); */
+
+    let canvas_material = Material::new(
+        "shaders/path_vert.wgsl",
+        "shaders/canvas_visualizer.wgsl",
+        Vec::new(),
+        Some(bytemuck::cast_slice(&[[[-1.0; 3]; 10]])),
+        true,
+        render_device,
+    );
+
+    let canvas_component = CanvasComponent::default();
+
+    let _main_canvas = scene.create_entity(
+        0,
+        true,
+        vec![
+            Box::new(canvas_component),
+            Box::new(test_square_mesh_component),
+        ],
+        Some((vec![canvas_material], 0)),
     );
 
     gamezap_engine.create_scene(scene);
