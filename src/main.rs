@@ -97,7 +97,7 @@ async fn main() {
         "shaders/path_vert.wgsl",
         "shaders/canvas_visualizer.wgsl",
         Vec::new(),
-        Some(bytemuck::cast_slice(&[[[-1.0; 3]; 10]])),
+        Some(bytemuck::cast_slice(&[[[-1.0; 3]; 256]])),
         true,
         render_device,
     );

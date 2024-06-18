@@ -698,11 +698,13 @@ dependencies = [
 
 [[package]]
 name = "jotit"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "bytemuck",
  "cool_utils",
  "gamezap",
+ "imgui",
+ "nalgebra",
  "sdl2",
  "tokio",
  "wgpu",
